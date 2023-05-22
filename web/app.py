@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd 
-from sklearn.datasets import load_iris 
 import matplotlib.pyplot as plt
 import streamlit as st
+
+
 
 # 페이지 기본 설정
 st.set_page_config(
