@@ -2,12 +2,13 @@ import pandas as pd
 import streamlit as st
 import pydeck as pdk
 import openai
+import time
 
 # 페이지 기본 설정
 st.set_page_config(
-   page_icon="🚌",
-   page_title="Trip Advisor",
-   layout="wide",
+    page_icon="🚌",
+    page_title="Trip Advisor",
+    layout="wide",
 )
 
 # 페이지 헤더, 서브헤더 제목 설정
@@ -23,7 +24,9 @@ select_species = st.sidebar.selectbox(
     ['제주도']
 )
 
-keywords = ["분위기", "로맨틱", "화려한", "아늑한", "모험적인", "신비로운", "편안한", "현대적인", "고요한", "전통적인", "활기찬", "이국적인", "로컬한", "청량한", "친환경적인", "힐링", "인스타감성", "자연친화적인", "감성적인", "레트로", "다채로운", "세계적인", "스포티한", "명상적인", "역사적인", "아트", "리조트", "도시적인", "농촌적인", "학문적인", "아이와 함께", "배움", "건강한"]
+keywords = ["분위기", "로맨틱", "화려한", "아늑한", "모험적인", "신비로운", "편안한", "현대적인", "고요한", "전통적인", "활기찬", "이국적인", "로컬한", "청량한",
+            "친환경적인", "힐링", "인스타감성", "자연친화적인", "감성적인", "레트로", "다채로운", "세계적인", "스포티한", "명상적인", "역사적인", "아트", "리조트",
+            "도시적인", "농촌적인", "학문적인", "아이와 함께", "배움", "건강한"]
 
 # select_multi_species 변수에 사용자가 선택한 키워드들이 지정됩니다.
 select_multi_species = st.sidebar.multiselect(
@@ -33,10 +36,7 @@ select_multi_species = st.sidebar.multiselect(
 
 # 여행 시작 버튼 생성
 start_button = st.sidebar.button('여행 시작!')
-
-# OpenAI API key 설정
-openai.api_key = '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'
-
+model_output=[]
 if start_button:
     if len(select_multi_species) != 3:  # 3개의 키워드가 선택되지 않은 경우 경고 메시지를 출력합니다.
         st.sidebar.warning('3개의 키워드를 모두 선택해주세요.')
@@ -63,9 +63,9 @@ if start_button:
         # 위치 데이터 프레임 생성
         data = pd.DataFrame(
             {
-            'lat': [33.4982, 33.4892, 33.4851],
-            'lon': [126.5312, 126.5323, 126.5432],
-            'name': ['Location A', 'Location B', 'Location C'],
+                'lat': [33.4982, 33.4892, 33.4851],
+                'lon': [126.5312, 126.5323, 126.5432],
+                'name': ['Location A', 'Location B', 'Location C'],
             }
         )
         # Pydeck Layer 생성
@@ -91,16 +91,30 @@ if start_button:
         # 지도를 Streamlit 앱에 추가
         st.pydeck_chart(jeju_map)
 
-        # 여기서부터 챗 GPT API 호출 부분 추가
-        response = openai.ChatCompletion.create(
-            model="text-davinci-002",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": f"I want to have a {model_output} trip to {select_species}. Can you recommend an itinerary?"},
-            ]
-        )
+        #chat-GPT로 출력 모듈
+        with st.spinner('최적의 여행 스케쥴을 작성하고 있습니다 잠시만 기다려주십시오...'):
+            openai.api_key = "aaaaaaaaa" # API KEY 를 넣어주세요
 
-        # API 응답을 사용자에게 출력
-        st.write(response['choices'][0]['message']['content'])
+            messages = [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user",
+                    "content": f"I want to have a {model_output} trip to {select_species}. Can you recommend an itinerary?"}
+            ]
+
+            response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=messages
+            )
+        response_content = response['choices'][0]['message']['content']
+
+        # Markdown 형식으로 제목과 내용을 정리합니다.
+        markdown_response = f"""
+        ### Itinerary for your {model_output} trip to {select_species}
+
+        {response_content}
+        """
+
+        # 이제 Streamlit에서 markdown 함수를 사용하여 응답을 보여줍니다.
+        st.markdown(markdown_response)
 
 
