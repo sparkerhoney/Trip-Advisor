@@ -63,3 +63,6 @@ a. 프로세스 소개 및 결과물<br>
 5. 강화학습 모델을 통해 최적의 동선을 알아냅니다. (강화학습 환경 정의 상태,보상,행동 + 코드)<br>
 6. Figma tool을 이용해 동선과 지도를 보여주는 시각화 페이지 구현<br>
 7. Streamlit tool을 이용해 웹 페이지 구현
+
+![image](https://github.com/sparkerhoney/trip_advisor/assets/108461006/23b122c3-7f68-4859-8c94-afb41726cecf)
+
