@@ -66,3 +66,5 @@ a. 프로세스 소개 및 결과물<br>
 
 ![image](https://github.com/sparkerhoney/trip_advisor/assets/108461006/23b122c3-7f68-4859-8c94-afb41726cecf)
 
+![image](https://github.com/sparkerhoney/trip_advisor/assets/108461006/27a29da3-7cff-42ae-8037-613eb2db7a57)
+
